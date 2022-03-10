@@ -1,0 +1,45 @@
+#注意配置文件命名：bootstrap.yml 配置是 SpringCloud 项目才会用到的。如果你的项目仅仅是一个 SpringBoot 项目，只会识别 application.yml 配置文件。
+server:
+  port: 8081
+  userMMK: false
+  servlet:
+    context-path: /CFCA
+spring:
+  application:
+    name: cfca
+  datasource:
+    hikari:
+      minimum-idle: 20
+      maximum-pool-size: 50
+      connection-test-query: SELECT 1
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      pool-name: DatebookHikariCP
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.8.80.250:8001
+      config:
+        server-addr: 10.8.80.250:8001
+        namespace:  5d65b702-a463-430f-913c-e967843672b3
+        file-extension: yaml
+        group: DEV_GROUP
+
+#不使用 nacos，则将配置放置本地，文件名记得切换成 application.yml
+#spring:
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://10.8.80.222:3306/blue_cert?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=Asia/Shanghai
+#    username: certUser
+#    password: cert#2021
+#  jpa:
+#    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+#    properties:
+#      hibernate:
+#        show-sql: true
+#        hbm2ddl:
+#          auto: update
