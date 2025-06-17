@@ -34,7 +34,7 @@ public class SwaggerConfig {
                 .title("CA证书服务项目接口文档")//标题
                 .description("更多请咨询服务开发者 江哲")//描述
                 //附加信息
-                .contact(new Contact("", "", "jiangzhe01@whty.com.cn"))
+                .contact(new Contact("", "", "jiangzhe@asiainfo.com"))
                 .version("1.0")//版本
                 .build();
     }

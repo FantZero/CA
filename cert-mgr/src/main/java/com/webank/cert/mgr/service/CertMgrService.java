@@ -1,13 +1,12 @@
 package com.webank.cert.mgr.service;
 
-import com.webank.cert.mgr.model.BaseResponse;
 import com.webank.cert.mgr.db.cert.entity.CertInfo;
 import com.webank.cert.mgr.db.cert.entity.CertKeyInfo;
+import com.webank.cert.mgr.model.BaseResponse;
 import com.webank.cert.mgr.model.vo.CertVO;
 import org.bouncycastle.asn1.x509.KeyUsage;
 
 import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.List;
 
 /**
@@ -60,6 +59,30 @@ public interface CertMgrService {
 
     //证书私钥列表查询
     BaseResponse<List<CertKeyInfo>> queryPriKeyList(String userId);
+
+    // 私钥查询
+    BaseResponse<CertKeyInfo> queryPriKey(Long priKeyId);
+
+    /**
+     * 删除私钥
+     * @param priKeyIds
+     * @return
+     */
+    BaseResponse<Boolean> deleteKeys(Iterable<Long> priKeyIds);
+
+    /**
+     * 删除证书
+     * @param certIds
+     * @return
+     */
+    BaseResponse<Boolean> deleteCerts(Iterable<Long> certIds);
+
+    /**
+     * 删除子证书请求
+     * @param requestIds
+     * @return
+     */
+    BaseResponse<Boolean> deleteRequests(Iterable<Long> requestIds);
 
     //证书验证
     boolean verify(String root_cert_content, List<String> chain_cert_contents) throws CertificateException;

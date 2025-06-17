@@ -48,10 +48,8 @@ public class CertManagerTest extends BaseTest {
     }
 
     /**
-     * 生成 公私钥 + 根证书
-     * 生成一条 cert_keys_info 和 cert_info 记录
-     *
-     * @throws Exception
+     * 生成 公私钥 + 自签根证书
+     * DB 生成一条 cert_keys_info 和 cert_info 记录
      */
     @Test
     public void testCreateRootCert0() throws Exception{
@@ -66,9 +64,8 @@ public class CertManagerTest extends BaseTest {
     }
 
     /**
-     * 生成 公私钥 + 根证书
-     * 设置有效期
-     * @throws Exception
+     * 生成 公私钥 + 自签根证书（设置有效期）
+     * DB 生成一条 cert_keys_info 和 cert_info 记录
      */
     @Test
     public void testCreateRootCert1() throws Exception{
@@ -77,7 +74,7 @@ public class CertManagerTest extends BaseTest {
                 .organizationName("fisco-bcos")
                 .organizationalUnitName("chain")
                 .build();
-        String userId = "wangyue";
+        String userId = "jz";
         Date beginDate = new Date();
         Date endDate = new Date(beginDate.getTime() + CertConstants.DEFAULT_VALIDITY);
         String cert = certManagerService.createRootCert(userId,issuer,beginDate,endDate).getCertContent();
@@ -85,8 +82,8 @@ public class CertManagerTest extends BaseTest {
     }
 
     /**
-     * 生成 公私钥 + 根证书
-     * @throws Exception
+     * 生成 自签根证书（根据已有私钥id）
+     * DB 生成一条 cert_info
      */
     @Test
     public void testCreateRootCert2() throws Exception{
@@ -95,13 +92,17 @@ public class CertManagerTest extends BaseTest {
                 .organizationName("fisco-bcos")
                 .organizationalUnitName("chain")
                 .build();
-        String userId = "wangyue";
+        String userId = "jz";
         Date beginDate = new Date();
         Date endDate = new Date(beginDate.getTime() + CertConstants.DEFAULT_VALIDITY);
-        String cert = certManagerService.createRootCert(userId,1,issuer,beginDate,endDate).getCertContent();
+        String cert = certManagerService.createRootCert(userId,2,issuer,beginDate,endDate).getCertContent();
         System.out.println(cert);
     }
 
+    /**
+     * 生成 自签根证书（根据已有私钥id，指定 keyUsage）
+     * DB 生成一条 cert_info
+     */
     @Test
     public void testCreateRootCert3() throws Exception{
         X500NameInfo issuer = X500NameInfo.builder()
@@ -109,7 +110,7 @@ public class CertManagerTest extends BaseTest {
                 .organizationName("fisco-bcos")
                 .organizationalUnitName("chain")
                 .build();
-        String userId = "wangyue";
+        String userId = "jz";
         Date beginDate = new Date();
         Date endDate = new Date(beginDate.getTime() + CertConstants.DEFAULT_VALIDITY);
         KeyUsage keyUsage = new KeyUsage(KeyUsage.dataEncipherment);
@@ -117,6 +118,10 @@ public class CertManagerTest extends BaseTest {
         System.out.println(cert);
     }
 
+    /**
+     * 生成 公私钥 + 自签根证书（上传 RSA 私钥 PEM 格式字符串）
+     * DB 生成一条 cert_keys_info 和 cert_info 记录
+     */
     @Test
     public void testCreateRootCert4() throws Exception{
         X500NameInfo issuer = X500NameInfo.builder()
@@ -124,7 +129,7 @@ public class CertManagerTest extends BaseTest {
                 .organizationName("fisco-bcos")
                 .organizationalUnitName("chain")
                 .build();
-        String userId = "wangyue";
+        String userId = "jz";
         Date beginDate = new Date();
         Date endDate = new Date(beginDate.getTime() + CertConstants.DEFAULT_VALIDITY);
         String pemPriKey = "-----BEGIN RSA PRIVATE KEY-----\n" +
@@ -155,11 +160,14 @@ public class CertManagerTest extends BaseTest {
                 "qb+qz+H6MpYzUvAOmtQIBSqCcFpy7aKb/CFe5tJjo0EbGghIErY=\n" +
                 "-----END RSA PRIVATE KEY-----\n";
 
-        String str = certManagerService.createRootCert(userId,pemPriKey, KeyAlgorithmEnums.RSA,issuer,beginDate,endDate).getCertContent();
+        String str = certManagerService.createRootCert(userId, pemPriKey, KeyAlgorithmEnums.RSA,issuer,beginDate,endDate).getCertContent();
         System.out.println(str);
     }
 
-
+    /**
+     * 生成 公私钥 + 自签根证书（上传 RSA 私钥 Hex 格式字符串）
+     * DB 生成一条 cert_keys_info 和 cert_info 记录
+     */
     @Test
     public void testCreateRootCertByHexPriKey() throws Exception{
         X500NameInfo issuer = X500NameInfo.builder()
@@ -167,7 +175,7 @@ public class CertManagerTest extends BaseTest {
                 .organizationName("fisco-bcos")
                 .organizationalUnitName("chain")
                 .build();
-        String userId = "wangyue";
+        String userId = "jz";
         Date beginDate = new Date();
         Date endDate = new Date(beginDate.getTime() + CertConstants.DEFAULT_VALIDITY);
         KeyPair keyPair = KeyUtils.generateKeyPair();
@@ -176,15 +184,18 @@ public class CertManagerTest extends BaseTest {
         System.out.println(cert);
     }
 
-
+    /**
+     * 生成 公私钥 + 证书申请（上传 RSA 私钥 Hex 格式字符串）
+     * DB 生成一条 cert_keys_info 和 cert_request_info 记录
+     */
     @Test
     public void testCreateCertRequestByHexPriKey() throws Exception{
         X500NameInfo subject = X500NameInfo.builder()
-                .commonName("agancy")
+                .commonName("agency1")
                 .organizationName("fisco-bcos")
-                .organizationalUnitName("agancy")
+                .organizationalUnitName("agency1")
                 .build();
-        String userId = "wangyue";
+        String userId = "agency1";
         String hexPriKey = "3500db68433dda968ef7bfe5a0ed6926b8e85aabcd2caa54f8327ca07ac73526";
         String cert = certManagerService.createCertRequestByHexPriKey(userId,hexPriKey,KeyAlgorithmEnums.ECDSA,3,subject).getCertRequestContent();
         System.out.println(cert);
@@ -197,9 +208,9 @@ public class CertManagerTest extends BaseTest {
     @Test
     public void testCreateCertRequest0() throws Exception{
         X500NameInfo subject = X500NameInfo.builder()
-                .commonName("agancy2")
+                .commonName("agency2")
                 .organizationName("fisco-bcos")
-                .organizationalUnitName("agancy2")
+                .organizationalUnitName("agency2")
                 .build();
         String userId = "agency2";
 //        X500NameInfo subject = X500NameInfo.builder()
@@ -216,9 +227,9 @@ public class CertManagerTest extends BaseTest {
     @Test
     public void testCreateCertRequest1() throws Exception{
         X500NameInfo subject = X500NameInfo.builder()
-                .commonName("agancy")
+                .commonName("agency")
                 .organizationName("fisco-bcos")
-                .organizationalUnitName("agancy")
+                .organizationalUnitName("agency")
                 .build();
         String userId = "wangyue1";
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDSA", "BC");

@@ -85,4 +85,16 @@ public class CertDao {
     public List<CertKeyInfo> findKeyByUserId(String userId){
         return certKeyInfoRepository.findByUserId(userId);
     }
+
+    public void deleteKeys(Iterable<Long> priKeyIds) {
+        priKeyIds.forEach(id -> certKeyInfoRepository.deleteById(id));
+    }
+
+    public void deleteCerts(Iterable<Long> certIds) {
+        certIds.forEach(id -> certInfoRepository.deleteById(id));
+    }
+
+    public void deleteRequests(Iterable<Long> requestIds) {
+        requestIds.forEach(id -> certRequestInfoRepository.deleteById(id));
+    }
 }

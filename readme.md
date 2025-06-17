@@ -1,9 +1,11 @@
-### 使用介绍
-本项目基于SpringBoot开发，使用Maven和MySQL，支持RSA、ECDSA、SM2签名算法的证书生成及签发。
+### 项目介绍
+1. 支持RSA、ECDSA、SM2签名算法的证书生成及签发
+2. 本项目基于SpringBoot开发，使用Maven和MySQL
+3. 支持注册到 SpringCloud Nacos
+4. 将私钥、证书、申请等相关操作封装成API接口。
+5. 增加 swagger ui
 
-默认使用SpringCloud nacos注册中心，如需更改详见启动配置文件。
-
-源码参考：https://governance-doc.readthedocs.io/zh_CN/latest/docs/WeBankBlockchain-Governance-Cert/index.html
+> 源码参考：https://governance-doc.readthedocs.io/zh_CN/latest/docs/WeBankBlockchain-Governance-Cert/index.html
 
 ### 数据库
 
@@ -42,17 +44,16 @@
 	subject_org         #子证书的 organizationName
 	user_id				#子证书的 user_id
 
+### SpringBoot 方式启动
 
-### 启动
-微服务部署注册spring cloud，pom.xml 中 jackson 相关包需要注意以下改动，如 spring-boot.version = 2.3.4.RELEASE
+1. 修改 application.yml：`spring.datasource.url`
 
-```xml
-<groupId>com.fasterxml.jackson.core</groupId>
-<artifactId>jackson-databind</artifactId>
-<version>2.10.5</version>
+### SpringCloud 方式启动
 
-<groupId>com.fasterxml.jackson.core</groupId>
-<artifactId>jackson-annotations</artifactId>
-<version>2.9.6</version>
-```
+1. 删除 pom.xml，更名：pom-springcloud.xml -> pom.xml
+2. 修改 application.yml：`spring.datasource.url`
+3. 修改 bootstrap.yml： `spring.cloud.nacos`
 
+### Swagger访问
+
+http://127.0.0.1:8081/swagger-ui/index.html

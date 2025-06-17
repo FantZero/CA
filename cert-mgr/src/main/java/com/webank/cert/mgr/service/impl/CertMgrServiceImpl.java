@@ -37,7 +37,6 @@ import java.util.List;
  * @create 2021/10/20 16:26
  */
 @Service("certMgrService")
-@ConditionalOnProperty(value = "server.userMMK", havingValue = "false")
 public class CertMgrServiceImpl extends CertMgrCommon{
 
     static {
